@@ -1,0 +1,3 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration= \
+com.shareit.live.hrpc.config.HrpcAutoConfiguration,\
+com.shareit.live.hrpc.HrpcServer
