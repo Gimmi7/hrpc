@@ -1,8 +1,8 @@
 package com.shareit.live.hrpc.util;
 
-import io.protostuff.LinkBuffer;
 import io.protostuff.LinkedBuffer;
 import io.protostuff.ProtostuffIOUtil;
+import io.protostuff.Schema;
 import io.protostuff.runtime.RuntimeSchema;
 
 import java.util.Map;
@@ -10,26 +10,51 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class ProtobufUtil {
 
-    private static final Map<Class<?>, RuntimeSchema<?>> cachedSchema = new ConcurrentHashMap<>();
+    private static final Map<Class<?>, Schema<?>> cachedSchema = new ConcurrentHashMap<>();
 
-    private static <T> RuntimeSchema<T> getSchema(Class<T> clazz) {
-        RuntimeSchema<T> schema = (RuntimeSchema<T>) cachedSchema.get(clazz);
+    private static <T> Schema<T> getSchema(Class<T> clazz) {
+        @SuppressWarnings("unchecked")
+        Schema<T> schema = (Schema<T>) cachedSchema.get(clazz);
         if (schema == null) {
-            schema = RuntimeSchema.createFrom(clazz);
-            cachedSchema.put(clazz, schema);
+            schema = RuntimeSchema.getSchema(clazz);
+            if (schema != null) {
+                cachedSchema.put(clazz, schema);
+            }
         }
         return schema;
     }
 
+    /**
+     * serialize object
+     *
+     * @param obj
+     * @param <T>
+     * @return
+     */
     public static <T> byte[] serialize(T obj) {
+        @SuppressWarnings("unchecked")
         Class<T> clazz = (Class<T>) obj.getClass();
-        RuntimeSchema<T> schema = getSchema(clazz);
-        LinkedBuffer buffer = LinkedBuffer.allocate(LinkBuffer.DEFAULT_BUFFER_SIZE);
-        return ProtostuffIOUtil.toByteArray(obj, schema, buffer);
+        LinkedBuffer buffer = LinkedBuffer.allocate(LinkedBuffer.DEFAULT_BUFFER_SIZE);
+        try {
+            Schema<T> schema = getSchema(clazz);
+            return ProtostuffIOUtil.toByteArray(obj, schema, buffer);
+        } catch (Exception e) {
+            throw new IllegalStateException(e.getMessage(), e);
+        } finally {
+            buffer.clear();
+        }
     }
 
+    /**
+     * deserialize byte arr
+     *
+     * @param data
+     * @param clazz
+     * @param <T>
+     * @return
+     */
     public static <T> T deserialize(byte[] data, Class<T> clazz) {
-        RuntimeSchema<T> schema = RuntimeSchema.createFrom(clazz);
+        Schema<T> schema = getSchema(clazz);
         T message = schema.newMessage();
         ProtostuffIOUtil.mergeFrom(data, message, schema);
         return message;
