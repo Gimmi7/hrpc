@@ -6,7 +6,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import java.util.List;
 
 @Data
-@ConfigurationProperties(prefix = "spring.hrpc")
+@ConfigurationProperties(prefix = "hrpc")
 public class HrpcProperties {
     /**
      * enable hrpc server launch
