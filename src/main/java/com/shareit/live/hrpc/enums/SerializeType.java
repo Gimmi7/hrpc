@@ -1,11 +1,9 @@
 package com.shareit.live.hrpc.enums;
 
-import com.shareit.live.hrpc.service.impl.FastjsonSerializeService;
 import com.shareit.live.hrpc.service.impl.ProtostuffSerializeService;
 
 public enum SerializeType {
-    FASTJSON(1, FastjsonSerializeService.class),
-    PROTOSTUFF(2, ProtostuffSerializeService.class);
+    PROTOSTUFF(1, ProtostuffSerializeService.class);
 
     private int value;
     private Class clazz;

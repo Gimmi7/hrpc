@@ -22,5 +22,5 @@ public @interface HrpcService {
 
     String serverFetchBeanName() default "";
 
-    SerializeType serialization() default SerializeType.FASTJSON;
+    SerializeType serialization() default SerializeType.PROTOSTUFF;
 }

@@ -60,6 +60,12 @@
 			<version>1.7.2</version>
 		</dependency>
 
+		<!-- https://mvnrepository.com/artifact/com.alipay.sofa/hessian -->
+		<dependency>
+			<groupId>com.alipay.sofa</groupId>
+			<artifactId>hessian</artifactId>
+			<version>4.0.4</version>
+		</dependency>
 
 
 		<dependency>

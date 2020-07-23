@@ -4,7 +4,7 @@ import com.shareit.live.hrpc.exception.HrpcException;
 import com.shareit.live.hrpc.service.HrpcRequest;
 import com.shareit.live.hrpc.service.HrpcResponse;
 import com.shareit.live.hrpc.service.SerializeService;
-import com.shareit.live.hrpc.service.impl.FastjsonSerializeService;
+import com.shareit.live.hrpc.service.impl.ProtostuffSerializeService;
 import com.shareit.live.hrpc.util.SerializeUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeansException;
@@ -30,7 +30,7 @@ public class HrpcServer implements ApplicationContextAware {
 
     private ApplicationContext applicationContext;
 
-    private static final SerializeService defaultSerializeService = new FastjsonSerializeService();
+    private static final SerializeService defaultSerializeService = new ProtostuffSerializeService();
 
 
     @Override
@@ -59,11 +59,11 @@ public class HrpcServer implements ApplicationContextAware {
             Class[] argsTypes = hrpcRequest.getArgTypes();
 
             //todo test argsType mismatch
-            if (args != null) {
-                for (int i = 0; i < args.length; i++) {
-                    System.out.println(argsTypes[i].getCanonicalName() + " -> " + args[i].getClass().getCanonicalName());
-                }
-            }
+//            if (args != null) {
+//                for (int i = 0; i < args.length; i++) {
+//                    System.out.println(argsTypes[i].getCanonicalName() + " -> " + args[i].getClass().getCanonicalName());
+//                }
+//            }
 
             Method method = bean.getClass().getMethod(hrpcRequest.getMethod(), argsTypes);
             Object result = method.invoke(bean, args);
@@ -76,14 +76,14 @@ public class HrpcServer implements ApplicationContextAware {
             String message = e.getClass().getName() + ": " + e.getMessage();
             hrpcResponse.error(message, e, e.getStackTrace());
             log.error("hrpc server method invoke error, className={}, method={}, err={}", hrpcRequest.getClazz(), hrpcRequest.getMethod(), e);
-        } catch (IllegalAccessException e) {
-            String message = e.getClass().getName() + ": " + e.getMessage();
-            hrpcResponse.error(message, e, e.getStackTrace());
-            log.error("hrpc server, illegalAccess, className={}, method={}, err={}", hrpcRequest.getClazz(), hrpcRequest.getMethod(), e);
         } catch (NoSuchMethodException e) {
             String message = e.getClass().getName() + ": " + e.getMessage();
             hrpcResponse.error(message, e, e.getStackTrace());
             log.error("hrpc server, no such method err, className={}, method={}, err={}", hrpcRequest.getClazz(), hrpcRequest.getMethod(), e);
+        } catch (IllegalAccessException e) {
+            String message = e.getClass().getName() + ": " + e.getMessage();
+            hrpcResponse.error(message, e, e.getStackTrace());
+            log.error("hrpc server, illegalAccess, className={}, method={}, err={}", hrpcRequest.getClazz(), hrpcRequest.getMethod(), e);
         }
 
         return serializeService.serialize(hrpcResponse);

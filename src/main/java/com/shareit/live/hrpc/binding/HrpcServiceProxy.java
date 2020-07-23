@@ -8,7 +8,7 @@ import com.shareit.live.hrpc.exception.HrpcException;
 import com.shareit.live.hrpc.service.HrpcRequest;
 import com.shareit.live.hrpc.service.HrpcResponse;
 import com.shareit.live.hrpc.service.SerializeService;
-import com.shareit.live.hrpc.service.impl.FastjsonSerializeService;
+import com.shareit.live.hrpc.service.impl.ProtostuffSerializeService;
 import com.shareit.live.hrpc.util.SerializeUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ArrayUtils;
@@ -27,7 +27,7 @@ public class HrpcServiceProxy<T> implements InvocationHandler {
 
     private final BeanFactory beanFactory;
 
-    private static final SerializeService defaultSerializeService = new FastjsonSerializeService();
+    private static final SerializeService defaultSerializeService = new ProtostuffSerializeService();
 
     public HrpcServiceProxy(Class<T> hrpcService, Object invoker, BeanFactory beanFactory) {
         this.hrpcService = hrpcService;

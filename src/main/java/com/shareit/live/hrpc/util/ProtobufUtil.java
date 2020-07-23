@@ -1,7 +1,7 @@
 package com.shareit.live.hrpc.util;
 
 import io.protostuff.LinkedBuffer;
-import io.protostuff.ProtostuffIOUtil;
+import io.protostuff.ProtobufIOUtil;
 import io.protostuff.Schema;
 import io.protostuff.runtime.RuntimeSchema;
 
@@ -37,7 +37,7 @@ public class ProtobufUtil {
         LinkedBuffer buffer = LinkedBuffer.allocate(LinkedBuffer.DEFAULT_BUFFER_SIZE);
         try {
             Schema<T> schema = getSchema(clazz);
-            return ProtostuffIOUtil.toByteArray(obj, schema, buffer);
+            return ProtobufIOUtil.toByteArray(obj,schema,buffer);
         } catch (Exception e) {
             throw new IllegalStateException(e.getMessage(), e);
         } finally {
@@ -56,7 +56,7 @@ public class ProtobufUtil {
     public static <T> T deserialize(byte[] data, Class<T> clazz) {
         Schema<T> schema = getSchema(clazz);
         T message = schema.newMessage();
-        ProtostuffIOUtil.mergeFrom(data, message, schema);
+        ProtobufIOUtil.mergeFrom(data,message,schema);
         return message;
     }
 }

@@ -13,5 +13,5 @@ public class RemoteServer {
     /**
      * comma separated server address
      */
-    private String server;
+    private String servers;
 }

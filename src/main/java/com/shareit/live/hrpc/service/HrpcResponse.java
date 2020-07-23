@@ -4,7 +4,7 @@ import com.shareit.live.hrpc.enums.HrpcResponseStatus;
 import lombok.Data;
 
 @Data
-public class HrpcResponse {
+public class HrpcResponse  {
 
     /**
      * response status
