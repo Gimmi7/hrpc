@@ -24,7 +24,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 @RestController
-@ConditionalOnProperty(value = "spring.hrpc.enable", havingValue = "true")
+@ConditionalOnProperty(value = "hrpc.enable", havingValue = "true")
 @Slf4j
 public class HrpcServer implements ApplicationContextAware {
 
