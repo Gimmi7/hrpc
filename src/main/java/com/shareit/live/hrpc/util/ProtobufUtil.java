@@ -10,6 +10,14 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class ProtobufUtil {
 
+    static {
+        /**
+         * https://github.com/protostuff/protostuff/issues/240
+         * enable morph capability globally.
+         */
+        System.setProperty("protostuff.runtime.pojo_schema_on_collection_fields", "true");
+    }
+
     private static final Map<Class<?>, Schema<?>> cachedSchema = new ConcurrentHashMap<>();
 
     private static <T> Schema<T> getSchema(Class<T> clazz) {
@@ -37,7 +45,7 @@ public class ProtobufUtil {
         LinkedBuffer buffer = LinkedBuffer.allocate(LinkedBuffer.DEFAULT_BUFFER_SIZE);
         try {
             Schema<T> schema = getSchema(clazz);
-            return ProtobufIOUtil.toByteArray(obj,schema,buffer);
+            return ProtobufIOUtil.toByteArray(obj, schema, buffer);
         } catch (Exception e) {
             throw new IllegalStateException(e.getMessage(), e);
         } finally {
@@ -56,7 +64,7 @@ public class ProtobufUtil {
     public static <T> T deserialize(byte[] data, Class<T> clazz) {
         Schema<T> schema = getSchema(clazz);
         T message = schema.newMessage();
-        ProtobufIOUtil.mergeFrom(data,message,schema);
+        ProtobufIOUtil.mergeFrom(data, message, schema);
         return message;
     }
 }
