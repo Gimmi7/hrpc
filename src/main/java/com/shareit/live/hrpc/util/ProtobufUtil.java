@@ -10,13 +10,13 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class ProtobufUtil {
 
-    static {
-        /**
-         * https://github.com/protostuff/protostuff/issues/240
-         * enable morph capability globally.
-         */
-        System.setProperty("protostuff.runtime.pojo_schema_on_collection_fields", "true");
-    }
+//    static {
+//        /**
+//         * https://github.com/protostuff/protostuff/issues/240
+//         * enable morph capability globally.
+//         */
+//        System.setProperty("protostuff.runtime.pojo_schema_on_collection_fields", "true");
+//    }
 
     private static final Map<Class<?>, Schema<?>> cachedSchema = new ConcurrentHashMap<>();
 
