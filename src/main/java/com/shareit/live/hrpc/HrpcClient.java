@@ -49,7 +49,7 @@ public class HrpcClient {
 
     }
 
-    @Retryable(value = {RestClientException.class}, maxAttempts = 2, backoff = @Backoff(delay = 200L))
+    @Retryable(value = {RestClientException.class}, maxAttempts = 1, backoff = @Backoff(delay = 200L))
     public byte[] call(String name, String serverFetchBeanName, byte[] req) {
         String server = null;
         if (this.beanFactory.containsBean(serverFetchBeanName)) {
